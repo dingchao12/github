@@ -10,6 +10,31 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            keyAlias 'longyuan'
+            keyPassword 'LYat2013'
+            storeFile file('G:/longyuan.keystore')
+            storePassword 'LYat2013'
+        }
+        debug {
+            keyAlias 'longyuan'
+            keyPassword 'LYat2013'
+            storeFile file('G:/longyuan.keystore')
+            storePassword 'LYat2013'
+        }
+    }
+
+    applicationVariants.all {
+        //判断是release还是debug版本
+        def buildType = it.buildType.name
+        //获取当前时间的"YYYY-MM-dd"格式。
+        def createTime = new Date().format("YYYYMMddHHmm", TimeZone.getTimeZone("GMT+08:00"))
+        //只对Release包起作用，如果不是Release包则不变更输出路径，否则可能导致AS无法自动安装debug包。
+        if (buildType == "release" || buildType == "DangjoyRelease") {
+            it.getPackageApplication().outputDirectory = new File(project.rootDir.absolutePath + "/apks/${createTime}")
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
